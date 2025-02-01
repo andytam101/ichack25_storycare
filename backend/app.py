@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from text_generation import generate_story_text, generate_chapter_to_prompt, shorten_text
 from img_generation import generate_image
+import json
 
 
 app = Flask(__name__)
@@ -10,31 +11,32 @@ def prompt():
     if request.method == "POST":
         prompt = request.form["prompt"] # change this to whatever matches the frontend
         
+        with open("sample.json", "r") as f:
+            data = json.load(f)
+            f.close()
+
         # list of dictionaries containing (revised_prompt, url)
-        all_images_data, all_captions = get_images_and_captions_from_user_prompt(prompt)   
+        _, _, all_images_data, all_captions = get_images_and_captions_from_user_prompt(prompt, data)   
         return jsonify({
             "all_images": all_images_data,
             "all_captions": all_captions
         })
 
 
-def get_images_and_captions_from_user_prompt(prompt, n=3):
-    paragraphs = generate_story_text(prompt, n=n)
-    print(paragraphs)
+def get_images_and_captions_from_user_prompt(prompt, commands):
+    print("Generating story")
+    paragraphs = generate_story_text(prompt, commands)
     paragraphs = paragraphs.split("\n\n")
-    assert len(paragraphs) == n
-    print("=" * 100)
-    img_prompts = list(map(generate_chapter_to_prompt, paragraphs))
-    print(img_prompts)
-    print("=" * 100)
-    images_data = list(map(generate_image, img_prompts))
-    print(images_data)
-    summarised_text = list(map(shorten_text, paragraphs))
-    print("=" * 100)
-    print(summarised_text)
-    return images_data, summarised_text
+    print("Generating prompts")
+    img_prompts = list(map(lambda x: generate_chapter_to_prompt(x, commands), paragraphs))
+    print("Generating images")
+    images_data = list(map(lambda x: generate_image(x, commands), img_prompts))
+    print("Generating summaries")
+    summarised_text = list(map(lambda x: shorten_text(x, commands), paragraphs))
+    return paragraphs, img_prompts, images_data, summarised_text
 
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    result = get_images_and_captions_from_user_prompt("My child has asthma. Show me the diagnosis")
+    paras, prompts, images, summaries = get_images_and_captions_from_user_prompt("My child has asthma. Show me the diagnosis")
+
