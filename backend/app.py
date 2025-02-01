@@ -1,30 +1,27 @@
-from flask import Flask, request
-
+from flask import Flask, request, jsonify
+from text_generation import generate_story_text, generate_chapter_to_prompt
+from img_generation import generate_image
 
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    pass
-
-
 @app.route("/prompt", methods=["POST"])
 def prompt():
     if request.method == "POST":
-        # takes in prompt from frontend
+        prompt = request.form["prompt"] # change this to whatever matches the frontend
+        
+        # list of dictionaries containing (revised_prompt, url)
+        all_images_data = get_images_from_user_prompt(prompt)   
+        return jsonify({
+            "all_images": all_images_data
+        })
 
-        # pass into LLM to get complex story split into n short chapters
 
-        # convert chapters into text-to-image prompt
-
-        # pass into image generator to get images
-
-        # pass into LLM again to make story simpler
-
-        # output result
-
-        pass
+def get_images_from_user_prompt(prompt):
+    paragraphs = generate_story_text(prompt)
+    img_prompts = list(map(generate_chapter_to_prompt, paragraphs.split("\n\n")))
+    images_data = list(map(generate_image, img_prompts))
+    return images_data
 
 
 if __name__ == "__main__":
