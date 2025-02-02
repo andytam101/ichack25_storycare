@@ -24,5 +24,6 @@ def generate_output(prompt):
     
     return paragraphs, images
 
+
 if __name__ == "__main__":
     app.run(debug=True)
