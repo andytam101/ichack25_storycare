@@ -111,7 +111,7 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
                         transition={{ duration: 0.8 }}
                         style={{
                             padding: "1.5rem",
-                            backgroundColor: "lightgrey",
+                            backgroundColor: "white",
                             borderRadius: "10px",
                             boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                             marginTop: "20px"
