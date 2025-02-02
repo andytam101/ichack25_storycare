@@ -2,8 +2,6 @@ from openai import OpenAI
 from api_key import API_KEY
 
 
-client = OpenAI(api_key=API_KEY)
-
 
 def generate_image(prompt):
     result = client.images.generate(
@@ -43,10 +41,6 @@ def generate_dalle_prompt(story):
 
     return result
 
-# story = generate_short_story(".")
-# print(story)
-# paragraphs = story.split("\n\n")
-# dalle_prompts = list(map(lambda x: generate_dalle_prompt(x), paragraphs))
-# print(dalle_prompts)
-# images = list(map(lambda x: generate_image(x), dalle_prompts))
-# print(images)
+
+
+client = OpenAI(api_key=API_KEY)
