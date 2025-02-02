@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Box, Typography, Container, CircularProgress } from "@mui/material";
 import { motion } from "framer-motion";
 
-export default function StoryViewer({ prompt }) {
+export default function StoryViewer({ prompt, prompt2, promptType }) {
     const [storyData, setStoryData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -16,7 +16,7 @@ export default function StoryViewer({ prompt }) {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
                     },
-                    body: JSON.stringify({ prompt }), // Send prompt in body
+                    body: JSON.stringify({ prompt, prompt2, promptType }), // Send prompt in body
                 });
 
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,7 +30,7 @@ export default function StoryViewer({ prompt }) {
         };
 
         fetchStory();
-    }, [prompt]);
+    }, [prompt, prompt2, promptType]);
 
     if (loading) return <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />;
 

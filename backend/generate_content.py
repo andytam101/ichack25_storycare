@@ -11,14 +11,14 @@ def generate_image(prompt):
         style="vivid"
     ).data[0]
     
-    return result
+    return result.url
 
 
 def generate_short_story(prompt):
     result = client.chat.completions.create(
         model="gpt-4o",
         messages= [
-            {"role": "developer", "content": "Write a short story on the given prompt. Write 5 paragraphs, maximum 20 words each. Split them up in 2 newlines"},
+            {"role": "developer", "content": "Write a short story on the given prompt for a child. Make it child-friendly and easy to understand. Write 3 paragraphs, maximum 30 words each. Split them up in 2 newlines"},
             {"role": "user", "content": prompt}
         ],
         temperature=1,
