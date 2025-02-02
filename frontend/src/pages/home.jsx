@@ -10,8 +10,8 @@ export default function Home() {
     const [isVisible2, setIsVisible2] = useState(false);
     const [submittedType, setSubmittedType] = useState(null);
     const [selectedType, setSelectedType] = useState("");
-    const [username, setUsername] = useState("")
-    const [submittedUsername, setSubmittedUsername] = useState(null)
+    const [username, setUsername] = useState("");
+    const [submittedUsername, setSubmittedUsername] = useState(null);
 
     const handleSearch = (event) => {
         if (event.key === "Enter" || event.type === "click") {
@@ -22,47 +22,68 @@ export default function Home() {
         }
     };
 
-    const handleTypeChange = e => {
-        let value = e.target.value
-        setSelectedType(e.target.value)
+    const handleTypeChange = (e) => {
+        let value = e.target.value;
+        setSelectedType(value);
         if (value === "test") {
             setIsVisible2(false);
-            document.getElementById("textfield").setAttribute("placeholder", "Enter a medical test...");
+            document.getElementById("textfield").setAttribute("placeholder", "Enter a medical test");
         } else if (value === "treatment") {
             setIsVisible2(true);
         } else {
             setIsVisible2(false);
-            document.getElementById("textfield").setAttribute("placeholder", "Enter a disease...");
+            document.getElementById("textfield").setAttribute("placeholder", "Enter the medical condition");
         }
-    }
+    };
 
     return (
         <>
             {!submittedPrompt ? (
                 // Home Page with Search Bar
-                <Container maxWidth="sm">
+                <Container maxWidth="sm" sx={{ display: "flex", justifyContent: "center", height: "100vh" }}>
                     <Box
                         display="flex"
                         flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
-                        height="70vh"
-                        width="50vw"
-                        marginTop="8vh"
                         textAlign="center"
-                        borderRadius="16px"
-                        padding="12px"
-                        style={{"background-color": "lightblue"}}
+                        sx={{
+                            backgroundColor: "white",
+                            borderRadius: "16px",
+                            padding: "24px",
+                            boxShadow: 3,
+                            width: "100%",
+                            maxWidth: "500px",
+                            marginTop: "6vh",
+                            marginBottom: "30px"
+                        }}
                     >
-                        <Typography variant="h2" gutterBottom>
+                        <div marginBottom="12px" style={{ marginTop: "-36px"}}>
+                            <img src="/book.png" alt="Picture of a book." height="96px"/>                
+                        </div>
+                        <Typography variant="h2" marginTop="4vh" marginBottom="6px" gutterBottom sx={{ fontWeight: 700 }}>
                             StoryCare
                         </Typography>
-                        <Typography variant="h6" color="textSecondary" gutterBottom>
-                            Your story, your strength.
+                        <Typography variant="h6" color="textSecondary" gutterBottom marginBottom="24px" sx={{
+                            animation: "floatIn 2s ease-out forwards",
+                        }}>
+                            One story at a time.
                         </Typography>
-                        <div value={selectedType}>
-                            <label>Type: </label>
-                            <select value={selectedType} onChange={handleTypeChange}>
+                        
+                        {/* Type label and dropdown on the same line */}
+                        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                            <label style={{ fontSize: "16px", fontWeight: 500, marginRight: "12px" }}>Choose Story Type:</label>
+                            <select
+                                value={selectedType}
+                                onChange={handleTypeChange}
+                                style={{
+                                    padding: "8px",
+                                    fontSize: "16px",
+                                    width: "200px",
+                                    borderRadius: "8px",
+                                    border: "1px solid #ccc",
+                                }}
+                            >
                                 <option value="">-- Choose --</option>
                                 <option value="test">Medical Test</option>
                                 <option value="diagnosis">Diagnosis</option>
@@ -70,19 +91,20 @@ export default function Home() {
                                 <option value="treatment">Treatment</option>
                                 <option value="red_flags">Watch Out For</option>
                             </select>
-                        </div>
+                        </Box>
+
                         <TextField
                             variant="outlined"
-                            placeholder="Enter your character's name..."
+                            placeholder="Enter the character's name"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             onKeyDown={handleSearch}
                             fullWidth
-                            sx={{ mt: 2,  width: "90%"}}
+                            sx={{ mt: 2, width: "90%" }}
                         />
                         <TextField
                             variant="outlined"
-                            placeholder="Enter a disease..."
+                            placeholder="Enter the medical condition"
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             onKeyDown={handleSearch}
@@ -92,19 +114,29 @@ export default function Home() {
                         />
                         <TextField
                             variant="outlined"
-                            placeholder="Enter a treatment..."
+                            placeholder="Enter a treatment"
                             value={prompt2}
                             onChange={(e) => setPrompt2(e.target.value)}
                             onKeyDown={handleSearch}
                             id="textfield2"
                             fullWidth
-                            sx={{ mt: 2, display: isVisible2 ? "block" : "none", width: "90%" }}
+                            sx={{
+                                mt: 2,
+                                width: "90%",
+                                display: isVisible2 ? "block" : "none",
+                            }}
                         />
                         <Button
                             variant="contained"
                             color="primary"
                             onClick={handleSearch}
-                            sx={{ mt: 5 }}
+                            sx={{
+                                mt: 4,
+                                width: "100%",
+                                padding: "12px",
+                                fontSize: "16px",
+                                borderRadius: "8px",
+                            }}
                         >
                             Generate Story
                         </Button>
@@ -112,9 +144,13 @@ export default function Home() {
                 </Container>
             ) : (
                 // Show StoryViewer when the user submits a search
-                <StoryViewer username={submittedUsername} prompt={submittedPrompt} prompt2={submittedPrompt2} promptType={submittedType}/>
+                <StoryViewer
+                    username={submittedUsername}
+                    prompt={submittedPrompt}
+                    prompt2={submittedPrompt2}
+                    promptType={submittedType}
+                />
             )}
         </>
     );
 }
-
