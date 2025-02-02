@@ -10,12 +10,15 @@ export default function Home() {
     const [isVisible2, setIsVisible2] = useState(false);
     const [submittedType, setSubmittedType] = useState(null);
     const [selectedType, setSelectedType] = useState("");
+    const [username, setUsername] = useState("")
+    const [submittedUsername, setSubmittedUsername] = useState(null)
 
     const handleSearch = (event) => {
         if (event.key === "Enter" || event.type === "click") {
             setSubmittedPrompt(prompt); // Send prompt to StoryViewer
             setSubmittedPrompt2(prompt2);
             setSubmittedType(selectedType);
+            setSubmittedUsername(username);
         }
     };
 
@@ -43,8 +46,13 @@ export default function Home() {
                         flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
-                        height="100vh"
+                        height="70vh"
+                        width="50vw"
+                        marginTop="8vh"
                         textAlign="center"
+                        borderRadius="16px"
+                        padding="12px"
+                        style={{"background-color": "lightblue"}}
                     >
                         <Typography variant="h2" gutterBottom>
                             StoryCare
@@ -65,30 +73,38 @@ export default function Home() {
                         </div>
                         <TextField
                             variant="outlined"
-                            placeholder="Enter a disease..."
+                            placeholder="Enter your character's name..."
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            onKeyDown={handleSearch}
                             fullWidth
+                            sx={{ mt: 2,  width: "90%"}}
+                        />
+                        <TextField
+                            variant="outlined"
+                            placeholder="Enter a disease..."
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             onKeyDown={handleSearch}
                             id="textfield"
-                            sx={{ mt: 2 }}
+                            fullWidth
+                            sx={{ mt: 2, width: "90%" }}
                         />
                         <TextField
                             variant="outlined"
                             placeholder="Enter a treatment..."
-                            fullWidth
                             value={prompt2}
                             onChange={(e) => setPrompt2(e.target.value)}
                             onKeyDown={handleSearch}
                             id="textfield2"
-                            sx={{ mt: 2 }}
-                            style={{ display: isVisible2 ? "block" : "none" }}
+                            fullWidth
+                            sx={{ mt: 2, display: isVisible2 ? "block" : "none", width: "90%" }}
                         />
                         <Button
                             variant="contained"
                             color="primary"
                             onClick={handleSearch}
-                            sx={{ mt: 2 }}
+                            sx={{ mt: 5 }}
                         >
                             Generate Story
                         </Button>
@@ -96,7 +112,7 @@ export default function Home() {
                 </Container>
             ) : (
                 // Show StoryViewer when the user submits a search
-                <StoryViewer prompt={submittedPrompt} prompt2={submittedPrompt2} promptType={submittedType}/>
+                <StoryViewer username={submittedUsername} prompt={submittedPrompt} prompt2={submittedPrompt2} promptType={submittedType}/>
             )}
         </>
     );

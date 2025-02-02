@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
-import { Box, Typography, Container, CircularProgress } from "@mui/material";
+import { Box, Typography, Container, CircularProgress, IconButton } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
-export default function StoryViewer({ prompt, prompt2, promptType }) {
+export default function StoryViewer({ username, prompt, prompt2, promptType }) {
     const [storyData, setStoryData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [index, setIndex] = useState(0);
+    
+    const handleLeftArrowClick = () => {
+        setIndex(prev => (prev > 0 ? prev - 1 : prev));
+    };
+
+    const handleRightArrowClick = () => {
+        setIndex(prev => (prev < storyData.images.length - 1 ? prev + 1 : prev));
+    };
 
     useEffect(() => {
         const fetchStory = async () => {
@@ -16,7 +26,7 @@ export default function StoryViewer({ prompt, prompt2, promptType }) {
                         "Content-Type": "application/json",
                         "Accept": "application/json",
                     },
-                    body: JSON.stringify({ prompt, prompt2, promptType }), // Send prompt in body
+                    body: JSON.stringify({ username, prompt, prompt2, promptType }),
                 });
 
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,49 +40,111 @@ export default function StoryViewer({ prompt, prompt2, promptType }) {
         };
 
         fetchStory();
-    }, [prompt, prompt2, promptType]);
+    }, [username, prompt, prompt2, promptType]);
 
     if (loading) return <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />;
 
     return (
-        <Container maxWidth="md">
-            {storyData?.captions?.map((caption, index) => (
-                <Box key={index} sx={{ minHeight: "100vh", position: "relative" }}>
-                    {/* Fullscreen Image */}
+        <>
+         <IconButton 
+                href="/" 
+                sx={{ 
+                    position: "absolute", 
+                    top: 40, 
+                    left: 40, 
+                    backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                    color: "white", 
+                    "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" } 
+                }}
+            >
+                Home
+            </IconButton>
+        
+            <Container
+                maxWidth="md"
+                sx={{ 
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100vh",
+                    position: "relative"
+                }}
+            >
+                {/* Left Arrow */}
+                <IconButton 
+                    onClick={handleLeftArrowClick} 
+                    sx={{ 
+                        position: "absolute",
+                        left: 10, 
+                        top: "50%", 
+                        transform: "translate(-150%, -100%)", 
+                        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                        color: "white", 
+                        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+                    }}
+                    style = {{ display: index > 0 ? "block" : "none" }}
+                    id="left-arrow"
+                >
+                    <ArrowBack fontSize="large" />
+                </IconButton>
+
+                {/* Main Content */}
+                <Box sx={{ textAlign: "center" }}>
+                    {/* Image */}
                     <Box
                         component="img"
-                        src={storyData.images[index]} // Fetch image from response
+                        src={storyData.images[index]} 
                         alt={`Story part ${index + 1}`}
                         sx={{
                             width: "100%",
-                            height: "100vh",
+                            maxHeight: "70vh",
                             objectFit: "cover",
-                            display: "block",
+                            borderRadius: "10px",
+                            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)"
                         }}
                     />
 
-                    {/* Story Chapter - Revealed on Scroll */}
+                    {/* Story Chapter */}
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        viewport={{ once: true }}
                         style={{
-                            padding: "2rem",
-                            backgroundColor: "white",
-                            textAlign: "center",
+                            padding: "1.5rem",
+                            backgroundColor: "lightgrey",
+                            borderRadius: "10px",
+                            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                            marginTop: "20px"
                         }}
                     >
                         <Typography variant="h4" gutterBottom>
                             Chapter {index + 1}
                         </Typography>
                         <Typography variant="body1" color="textSecondary">
-                            {caption}
+                            {storyData.captions[index]}
                         </Typography>
                     </motion.div>
                 </Box>
-            ))}
-        </Container>
+
+                {/* Right Arrow */}
+                <IconButton 
+                    onClick={handleRightArrowClick} 
+                    sx={{ 
+                        position: "absolute", 
+                        right: 10, 
+                        top: "50%", 
+                        transform: "translate(150%, -100%)", 
+                        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+                        color: "white", 
+                        "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" } 
+                        
+                    }}
+                    id="right-arrow"
+                    style = {{ display: index < storyData.images.length - 1? "block" : "none" }}
+                >
+                    <ArrowForward fontSize="large" />
+                </IconButton>
+            </Container>
+        </>
     );
 }
-

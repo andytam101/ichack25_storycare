@@ -21,12 +21,15 @@ def generate_story():
         user_prompt = data.get("prompt", "")
         user_prompt_2 = data.get("prompt2", "")
         prompt_type = data.get("promptType", "")
+        username = data.get("username", "")
 
-        # # depends on frontend
-        # child_name = request.form["child_name"]
+        print(username)
+        print(user_prompt)
+        print(user_prompt_2)
+        print(prompt_type)
 
         # might add type in later (i.e. test, disease or treatment)
-        starting_prompt = generate_starting_prompt("Dummy", prompt_type, user_prompt, user_prompt_2)
+        starting_prompt = generate_starting_prompt(username, prompt_type, user_prompt, user_prompt_2)
         if not user_prompt or not prompt_type:
             return jsonify({"error": "Prompt is required"}), 400
 
