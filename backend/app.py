@@ -1,14 +1,21 @@
 from flask import Flask, request, jsonify
 from generate_content import generate_image, generate_short_story, generate_dalle_prompt
+from utils import generate_starting_prompt
 
 app = Flask(__name__)
 
 
 @app.route("/prompt", methods=["POST"])
 def prompt():
-    user_prompt = request.form["prompt"]
+    # depends on frontend
+    prompt1 = request.form["prompt1"]
+    prompt2 = request.form.get("prompt2")
+    child_name = request.form["child_name"]
+    prompt_type = request.form["prompt_type"]
+
     # might add type in later (i.e. test, disease or treatment)
-    paragraphs, images = generate_output(user_prompt)
+    starting_prompt = generate_starting_prompt(child_name, prompt_type, prompt1, prompt2)
+    paragraphs, images = generate_output(starting_prompt)
 
     return jsonify({
         "captions": paragraphs,
