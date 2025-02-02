@@ -59,7 +59,7 @@ export default function Home() {
                         }}
                     >
                         <div marginBottom="12px" style={{ marginTop: "-36px"}}>
-                            <img src="/book.png" alt="Picture of a book." height="96px"/>                
+                            <img src="/book.png" alt="" height="96px"/>                
                         </div>
                         <Typography variant="h2" marginTop="4vh" marginBottom="6px" gutterBottom sx={{ fontWeight: 700 }}>
                             StoryCare
