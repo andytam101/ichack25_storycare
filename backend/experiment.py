@@ -4,7 +4,7 @@ import os
 import json
 
 
-PROMPT = "My child has asthma. Show me the diagnosis"
+PROMPT = "My child has asthma."
 
 
 def get_args():

@@ -19,3 +19,23 @@ def generate_image(prompt: str, commands):
     "revised_prompt": result.revised_prompt,
     "url": result.url
   }
+
+
+
+def generate_text(prompt):
+  result = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+      {"role": "developer", "content": "Repeat exactly what the user say."},
+      {"role": "user", "content": prompt}
+    ]
+  ).choices[0].message.content
+  return result
+
+
+commands = {
+  "image_generation": "No text. No words. Just visuals. Make it cartoon, and for kids."
+}
+
+PROMPT = "Child playing outside with his inhaler."
+print(generate_image(PROMPT, commands))
