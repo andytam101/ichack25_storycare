@@ -46,7 +46,7 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
 
     return (
         <>
-         <IconButton 
+            <IconButton 
                 href="/" 
                 sx={{ 
                     position: "absolute", 
@@ -54,6 +54,10 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
                     left: 40, 
                     backgroundColor: "rgba(0, 0, 0, 0.5)", 
                     color: "white", 
+                    borderRadius: "12px",
+                    width: "120px",
+                    paddingTop: "9px",
+                    paddingBottom: "9px",
                     "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" } 
                 }}
             >
