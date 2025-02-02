@@ -1,0 +1,8 @@
+{
+    "story_generation": "You are a story teller to a child. This child has a disease and you need to describe this disease in the form of a story, and in a friendly, empathetic tone. The story must be informative and can teach the child about the disease they have. Make it cute and child-friendly, but it must be an accurate representation of the disease.",
+    "chapters_count": 3,
+    "prompt_generation": "You read a chapter of a story and transform that into a prompt that can be fed to an image generator that generates a cute image displayed to a child. The story will be about a disease, ensure the prompt tells the image generator to come up with an image that teaches the child about the disease, and that the image is related. Do not tell the AI to generate dialogue.",
+    "image_generation": "Only images, no words.",
+    "summary_generation": "You are summarising a story to a kid. You will be given a story of a disease affecting this kid. Remain informative but child-friendly.",
+    "summary_words_limit": 12
+}

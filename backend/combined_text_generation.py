@@ -6,7 +6,7 @@ client = OpenAI(api_key=API_KEY)
 
 
 def generate_story_text(prompt, commands):                                                                                                          
-    # generate complex story to pass into LLM -> return n paragraphs#
+    # generate simple story to pass into LLM -> return n paragraphs#
     messages = [
         {"role": "developer", "content": commands["story_generation"] + f" You must separate the story into {commands["chapters_count"]} paragraphs. Separate each paragraph with 2 newlines."},
         {"role": "user", "content": prompt}
@@ -21,7 +21,7 @@ def generate_story_text(prompt, commands):
     return paragraphs
 
 
-def generate_chapter_to_prompt(chapter, commands):
+def generate_section_to_prompt(chapter, commands):
     messages = [
         {"role": "developer", "content": commands["prompt_generation"]},
         {"role": "user", "content": chapter}
