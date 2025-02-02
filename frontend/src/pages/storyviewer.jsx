@@ -7,12 +7,20 @@ export default function StoryViewer({ prompt }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simulated API call - replace with actual fetch from backend
         const fetchStory = async () => {
             setLoading(true);
             try {
-                // Replace with your backend API
-                const response = await fetch(`https://your-backend.com/generate-story?prompt=${prompt}`);
+                const response = await fetch("http://127.0.0.1:5000/generate-story", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    body: JSON.stringify({ prompt }), // Send prompt in body
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
                 const data = await response.json();
                 setStoryData(data);
             } catch (error) {
@@ -28,12 +36,12 @@ export default function StoryViewer({ prompt }) {
 
     return (
         <Container maxWidth="md">
-            {storyData?.map((item, index) => (
+            {storyData?.captions?.map((caption, index) => (
                 <Box key={index} sx={{ minHeight: "100vh", position: "relative" }}>
                     {/* Fullscreen Image */}
                     <Box
                         component="img"
-                        src={item.imageUrl}
+                        src={storyData.images[index]} // Fetch image from response
                         alt={`Story part ${index + 1}`}
                         sx={{
                             width: "100%",
@@ -56,10 +64,10 @@ export default function StoryViewer({ prompt }) {
                         }}
                     >
                         <Typography variant="h4" gutterBottom>
-                            {item.chapterTitle}
+                            Chapter {index + 1}
                         </Typography>
                         <Typography variant="body1" color="textSecondary">
-                            {item.chapterText}
+                            {caption}
                         </Typography>
                     </motion.div>
                 </Box>
@@ -67,3 +75,4 @@ export default function StoryViewer({ prompt }) {
         </Container>
     );
 }
+
