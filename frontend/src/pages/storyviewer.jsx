@@ -8,19 +8,20 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
     const [loading, setLoading] = useState(true);
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(0); // 1 for right, -1 for left
+    const [imageLoaded, setImageLoaded] = useState(false); // Track if the current image is loaded
 
-    const handleLeftArrowClick = () => {
-        if (index > 0) {
-            setDirection(-1);
-            setIndex((prev) => prev - 1);
-        }
-    };
+    // Preload images before updating state
+    const preloadImages = async (urls) => {
+        const promises = urls.map((url) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+        });
 
-    const handleRightArrowClick = () => {
-        if (index < storyData.images.length - 1) {
-            setDirection(1);
-            setIndex((prev) => prev + 1);
-        }
+        await Promise.all(promises); // Wait for all images to load
     };
 
     useEffect(() => {
@@ -39,6 +40,9 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
                 const data = await response.json();
+
+                // Preload images before updating state
+                await preloadImages(data.images);
                 setStoryData(data);
             } catch (error) {
                 console.error("Error fetching story:", error);
@@ -48,6 +52,15 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
 
         fetchStory();
     }, [username, prompt, prompt2, promptType]);
+
+    useEffect(() => {
+        if (storyData) {
+            setImageLoaded(false); // Reset when index changes
+            const img = new Image();
+            img.src = storyData.images[index];
+            img.onload = () => setImageLoaded(true);
+        }
+    }, [index, storyData]);
 
     if (loading) return <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />;
 
@@ -83,7 +96,7 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
             >
                 {/* Left Arrow */}
                 <IconButton
-                    onClick={handleLeftArrowClick}
+                    onClick={() => { setDirection(-1); setIndex((prev) => Math.max(prev - 1, 0)); }}
                     sx={{
                         position: "absolute",
                         left: 10,
@@ -110,18 +123,22 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
                         style={{ position: "absolute", width: "100%", textAlign: "center" }}
                     >
                         {/* Image */}
-                        <Box
-                            component="img"
-                            src={storyData.images[index]}
-                            alt={`Story part ${index + 1}`}
-                            sx={{
-                                width: "100%",
-                                maxHeight: "70vh",
-                                objectFit: "cover",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)"
-                            }}
-                        />
+                        {!imageLoaded ? (
+                            <CircularProgress sx={{ display: "block", margin: "auto", mt: 5 }} />
+                        ) : (
+                            <Box
+                                component="img"
+                                src={storyData.images[index]}
+                                alt={`Story part ${index + 1}`}
+                                sx={{
+                                    width: "100%",
+                                    maxHeight: "70vh",
+                                    objectFit: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)"
+                                }}
+                            />
+                        )}
 
                         {/* Story Chapter */}
                         <motion.div
@@ -148,7 +165,7 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
 
                 {/* Right Arrow */}
                 <IconButton
-                    onClick={handleRightArrowClick}
+                    onClick={() => { setDirection(1); setIndex((prev) => Math.min(prev + 1, storyData.images.length - 1)); }}
                     sx={{
                         position: "absolute",
                         right: 10,
@@ -167,3 +184,4 @@ export default function StoryViewer({ username, prompt, prompt2, promptType }) {
         </>
     );
 }
+
