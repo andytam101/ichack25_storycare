@@ -43,10 +43,10 @@ def generate_dalle_prompt(story):
 
     return result
 
-story = generate_short_story(".")
-print(story)
-paragraphs = story.split("\n\n")
-dalle_prompts = list(map(lambda x: generate_dalle_prompt(x), paragraphs))
-print(dalle_prompts)
-images = list(map(lambda x: generate_image(x), dalle_prompts))
-print(images)
+# story = generate_short_story(".")
+# print(story)
+# paragraphs = story.split("\n\n")
+# dalle_prompts = list(map(lambda x: generate_dalle_prompt(x), paragraphs))
+# print(dalle_prompts)
+# images = list(map(lambda x: generate_image(x), dalle_prompts))
+# print(images)
