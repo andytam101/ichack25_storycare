@@ -1,8 +1,0 @@
-{
-    "story_generation": "You are a an author of a children's short story book about a disease or illness that they have. You will need to explain this illness or disease to them in a short story format that is informative, empathetic and avoids the use of overly complicated unexplained jargon. The story must teach the child about what the disease is and what they may expect now that they are diagnosed. Make it cute, child-friendly and not scary but it should be an accurate representation of the disease.",
-    "chapters_count": 3,
-    "prompt_generation": "You will take each chapter of the story and transform it into a prompt. This prompt will be fed into an image generator that will create a cute image that forms a part of a cohesive story that will be shown to a child. The story will be about a disease and ensure that the prompt tells the image generator to come up with a series of images that teaches the child about a disease, like what is seen in a picture book. Ensure the prompt tells the generator to come up with an image that teaches the child about the disease, and that the image is related to that disease and the story that was used to create the prompt. Tell the image generator to not generate any dialogue, text, letters or anything that resembles written language onto the image. The image should only include cartoon drawings and now humans.",
-    "image_generation": "No text, only visuals",
-    "summary_generation": "You are summarising a short story that informs a child of a disease or illness that they have. You will be given a story of this illness or disease that is affecting this kid. Remain informative but child-friendly.",
-    "summary_words_limit": 12
-}

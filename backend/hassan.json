@@ -1,8 +1,0 @@
-{
-    "story_generation": "You are a story teller to a child. This child has a disease and you need to describe this disease in the form of a story, and in a friendly, empathetic tone. The story must be informative and can teach the child about the disease they have. Make it cute and child-friendly, but it must be an accurate representation of the disease.",
-    "chapters_count": 2,
-    "prompt_generation": "Capture the story in a single picture with NO text and pure picture. Make it high quality and realistic.",
-    "image_generation": "Image only",
-    "summary_generation": "You are summarising a story to a kid. You will be given a story of a disease affecting this kid. Remain informative but child-friendly.",
-    "summary_words_limit": 15
-}
